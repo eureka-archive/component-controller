@@ -98,7 +98,9 @@ abstract class Controller implements ControllerInterface
 
             $contentHtml = '<b>Exception[' . $exception->getCode() . ']: ' . $exception->getMessage(). '</b><pre>' . $exception->getTraceAsString() . '</pre>';
 
-            $content = new Template(EKA_APP . '/Web/Layout/Layout/' . Config::getInstance()->get('Framework\Theme\php\theme') . '/Main');
+            $layoutPath = Config::getInstance()->get('Eureka\Global\Theme\php\layout');
+            $themeName  = Config::getInstance()->get('Eureka\Global\Theme\php\theme');
+            $content = new Template($layoutPath . '/Template/' . $themeName . '/Main');
             $content->setVar('content', $contentHtml);
             $content->setVar('meta', Config::getInstance()->get('meta'));
         }
