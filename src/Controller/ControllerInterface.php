@@ -15,12 +15,11 @@ use Eureka\Component\Routing\RouteInterface;
  * Controller interface
  *
  * @author Romain Cottard
- * @version 2.1.0
  */
 interface ControllerInterface
 {
     /**
-     * IController constructor.
+     * Controller constructor.
      *
      * @param RouteInterface $route
      */
@@ -48,5 +47,4 @@ interface ControllerInterface
      * @throws \Exception
      */
     public function handleException(\Exception $exception);
-
 }

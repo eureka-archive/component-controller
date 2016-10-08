@@ -10,17 +10,15 @@
 namespace Eureka\Component\Controller;
 
 use Eureka\Component\Config\Config;
-use Eureka\Component\Response\ResponseInterface;
+use Eureka\Component\Response;
 use Eureka\Component\Routing\RouteInterface;
 use Eureka\Component\Template\Template;
 use Eureka\Component\Template\TemplateInterface;
-use Eureka\Component\Response;
 
 /**
  * Controller class
  *
  * @author Romain Cottard
- * @version 2.1.0
  */
 abstract class Controller implements ControllerInterface
 {
@@ -40,7 +38,7 @@ abstract class Controller implements ControllerInterface
     protected $template = null;
 
     /**
-     * @var ResponseInterface $response
+     * @var Response\ResponseInterface $response
      */
     protected $response = null;
 
@@ -48,8 +46,6 @@ abstract class Controller implements ControllerInterface
      * Class constructor
      *
      * @param    RouteInterface $route
-     * @return   Controller
-     * @access   public
      */
     public function __construct(RouteInterface $route)
     {
@@ -84,25 +80,27 @@ abstract class Controller implements ControllerInterface
      */
     public function handleException(\Exception $exception)
     {
-        $isAjax  = !empty($_SERVER['HTTP_X_REQUESTED_WITH']);
+        $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']);
 
         if ($isAjax) {
 
             $sEngine = Response\Factory::ENGINE_API;
             $sFormat = Response\Factory::FORMAT_JSON;
             $content = json_encode($exception->getTraceAsString());
-
         } else {
             $sEngine = Response\Factory::ENGINE_TEMPLATE;
             $sFormat = Response\Factory::FORMAT_HTML;
 
-            $contentHtml = '<b>Exception[' . $exception->getCode() . ']: ' . $exception->getMessage(). '</b><pre>' . $exception->getTraceAsString() . '</pre>';
+            $contentHtml = '<b>Exception[' . $exception->getCode() . ']: ' . $exception->getMessage() . '</b><pre>' . $exception->getTraceAsString() . '</pre>';
 
-            $layoutPath = Config::getInstance()->get('Eureka\Global\Theme\php\layout');
-            $themeName  = Config::getInstance()->get('Eureka\Global\Theme\php\theme');
-            $content = new Template($layoutPath . '/Template/' . $themeName . '/Main');
+            $layoutPath = Config::getInstance()
+                ->get('Eureka\Global\Theme\php\layout');
+            $themeName  = Config::getInstance()
+                ->get('Eureka\Global\Theme\php\theme');
+            $content    = new Template($layoutPath . '/Template/' . $themeName . '/Main');
             $content->setVar('content', $contentHtml);
-            $content->setVar('meta', Config::getInstance()->get('meta'));
+            $content->setVar('meta', Config::getInstance()
+                ->get('meta'));
         }
 
         $response = Response\Factory::create($sFormat, $sEngine);

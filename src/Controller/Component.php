@@ -9,26 +9,20 @@
 
 namespace Eureka\Component\Controller;
 
-
 /**
  * Controller class
  *
  * @author Romain Cottard
- * @version 2.1.0
  */
 abstract class Component
 {
     /**
-     * Data collection object.
-     *
-     * @var DataCollection $dataCollection
+     * @var DataCollection $dataCollection Data collection object.
      */
     protected $dataCollection = null;
 
     /**
      * Class constructor
-     *
-     * @return Component
      */
     public function __construct()
     {
@@ -38,7 +32,7 @@ abstract class Component
     /**
      * This method is executed before the main run() method.
      *
-     * @return   void
+     * @return  void
      */
     public function runBefore()
     {
@@ -47,10 +41,9 @@ abstract class Component
     /**
      * This method is executed after the main run() method.
      *
-     * @return   void
+     * @return  void
      */
     public function runAfter()
     {
     }
-
 }

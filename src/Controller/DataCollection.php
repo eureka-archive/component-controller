@@ -13,42 +13,31 @@ namespace Eureka\Component\Controller;
  * Data Collection class.
  *
  * @author Romain Cottard
- * @version 2.1.0
  */
 class DataCollection implements \Iterator
 {
     /**
-     * Length of the collection
-     *
-     * @var integer $length
+     * @var integer $length Length of the collection
      */
     protected $length = 0;
 
     /**
-     * Current position of the cursor in collection.
-     *
-     * @var integer
+     * @var integer Current position of the cursor in collection.
      */
     protected $index = 0;
 
     /**
-     * Index of keys
-     *
-     * @var array $indices
+     * @var array $indices Index of keys
      */
     protected $indices = array();
 
     /**
-     * Collection of data.
-     *
-     * @var array $collection
+     * @var array $collection Collection of data.
      */
     protected $collection = array();
 
     /**
      * PatternCollection constructor.
-     *
-     * @return DataCollection
      */
     public function __construct()
     {
@@ -58,13 +47,13 @@ class DataCollection implements \Iterator
     /**
      * Add data to the collection.
      *
-     * @param string $key
-     * @param mixed  $value
-     * @return DataCollection
+     * @param  string $key
+     * @param  mixed  $value
+     * @return self
      */
     public function add($key, $value)
     {
-        $this->collection[$key]     = $value;
+        $this->collection[$key]       = $value;
         $this->indices[$this->length] = $key;
         $this->length++;
 
@@ -74,7 +63,7 @@ class DataCollection implements \Iterator
     /**
      * Get length of the collection.
      *
-     * @return integer
+     * @return int
      */
     public function length()
     {
@@ -84,7 +73,7 @@ class DataCollection implements \Iterator
     /**
      * Get current data
      *
-     * @return DataCollection
+     * @return mixed
      */
     public function current()
     {
@@ -94,13 +83,11 @@ class DataCollection implements \Iterator
     /**
      * Reset internal cursor.
      *
-     * @return DataCollection
+     * @return void
      */
     public function reset()
     {
         $this->index = 0;
-
-        return $this;
     }
 
     /**
@@ -116,31 +103,27 @@ class DataCollection implements \Iterator
     /**
      * Go to the next data
      *
-     * @return DataCollection
+     * @return void
      */
     public function next()
     {
         $this->index++;
-
-        return $this;
     }
 
     /**
      * Go to the previous data.
      *
-     * @return DataCollection
+     * @return void
      */
     public function rewind()
     {
         $this->index = 0;
-
-        return $this;
     }
 
     /**
      * Check if have more data in the collection
      *
-     * @return boolean
+     * @return bool
      */
     public function valid()
     {
