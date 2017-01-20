@@ -19,7 +19,7 @@
   },
 
   "require": {
-    "eureka/component-config": "^1.0.0",
+    "eureka/component-config": "^1.0.1",
     "eureka/component-routing": "^1.0.0",
     "eureka/component-response": "^1.0.0",
     "eureka/component-template": "^1.0.0"

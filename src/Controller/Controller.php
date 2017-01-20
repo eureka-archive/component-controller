@@ -11,6 +11,7 @@ namespace Eureka\Component\Controller;
 
 use Eureka\Component\Config\Config;
 use Eureka\Component\Response;
+use Eureka\Component\Response\Html\Template as ResponseTemplate;
 use Eureka\Component\Routing\RouteInterface;
 use Eureka\Component\Template\Template;
 use Eureka\Component\Template\TemplateInterface;
@@ -43,6 +44,26 @@ abstract class Controller implements ControllerInterface
     protected $response = null;
 
     /**
+     * @var string $themeName Theme name
+     */
+    protected $themeName = '';
+
+    /**
+     * @var string $themeLayout Theme layout path
+     */
+    protected $themeLayoutPath = '';
+
+    /**
+     * @var string $themeLayoutTemplate Theme layout template name
+     */
+    protected $themeLayoutTemplate = 'Main';
+
+    /**
+     * @var string $modulePath Module path.
+     */
+    protected $modulePath = '';
+
+    /**
      * Class constructor
      *
      * @param    RouteInterface $route
@@ -60,6 +81,8 @@ abstract class Controller implements ControllerInterface
      */
     public function runBefore()
     {
+        $this->themeName       = Config::getInstance()->get('Eureka\Global\Theme\php\theme');
+        $this->themeLayoutPath = Config::getInstance()->get('Eureka\Global\Theme\php\layout');
     }
 
     /**
@@ -69,6 +92,26 @@ abstract class Controller implements ControllerInterface
      */
     public function runAfter()
     {
+    }
+
+    /**
+     * Get layout path.
+     *
+     * @return string
+     */
+    protected function getThemeLayoutPath()
+    {
+        return $this->themeLayoutPath;
+    }
+
+    /**
+     * Get theme name.
+     *
+     * @return string
+     */
+    protected function getThemeName()
+    {
+        return $this->themeName;
     }
 
     /**
@@ -93,19 +136,131 @@ abstract class Controller implements ControllerInterface
 
             $contentHtml = '<b>Exception[' . $exception->getCode() . ']: ' . $exception->getMessage() . '</b><pre>' . $exception->getTraceAsString() . '</pre>';
 
-            $layoutPath = Config::getInstance()
-                ->get('Eureka\Global\Theme\php\layout');
-            $themeName  = Config::getInstance()
-                ->get('Eureka\Global\Theme\php\theme');
+            $layoutPath = Config::getInstance()->get('Eureka\Global\Theme\php\layout');
+            $themeName  = Config::getInstance()->get('Eureka\Global\Theme\php\theme');
             $content    = new Template($layoutPath . '/Template/' . $themeName . '/Main');
             $content->setVar('content', $contentHtml);
-            $content->setVar('meta', Config::getInstance()
-                ->get('meta'));
+            $content->setVar('meta', Config::getInstance()->get('meta'));
         }
 
         $response = Response\Factory::create($sFormat, $sEngine);
-        $response->setHttpCode(500)
-            ->setContent($content)
-            ->send();
+        $response->setHttpCode(500)->setContent($content)->send();
+    }
+
+    /**
+     * Get Response object
+     *
+     * @param  string $templateName
+     * @return ResponseInterface
+     */
+    protected function getResponse($templateName)
+    {
+        $this->response = new ResponseTemplate();
+        $this->response->setHttpCode(200);
+        $this->response->setContent($this->getLayout($this->getTemplate($templateName)));
+
+        return $this->response;
+    }
+
+    /**
+     * Get Response object
+     *
+     * @param  string $templateName
+     * @return ResponseInterface
+     */
+    protected function getResponseJson($content)
+    {
+        $this->response = new Response\Json\Api();
+        $this->response->setHttpCode(200);
+        $this->response->setContent($content);
+
+        return $this->response;
+    }
+
+    /**
+     * Get Main layout template
+     *
+     * @param  TemplateInterface $template
+     * @return Template
+     */
+    protected function getLayout(TemplateInterface $template)
+    {
+        $layout = new Template($this->getThemeLayoutPath() . '/Template/'. $this->getThemeName() . '/' . $this->getThemeLayoutTemplate());
+        $layout->setVar('content', $template->render());
+        $layout->setVar('meta', Config::getInstance()->get('Eureka\Global\Meta'));
+
+        return $layout;
+    }
+
+    /**
+     * Get template instance
+     *
+     * @param  string $templateName
+     * @return Template
+     */
+    protected function getTemplate($templateName)
+    {
+        $template = new Template($this->getModulePath() . '/Template/' . $this->getThemeName() . '/' . $templateName);
+        $template->setVars($this->dataCollection->toArray());
+
+        return $template;
+    }
+
+    /**
+     * @param  string $key
+     * @param  mixed $value
+     * @return self
+     */
+    protected function addData($key, $value)
+    {
+        $this->dataCollection->add($key, $value);
+
+        return $this;
+    }
+
+    /**
+     * Get module path.
+     *
+     * @return string
+     */
+    protected function getModulePath()
+    {
+        return $this->modulePath;
+    }
+
+    /**
+     * Get theme layout template name.
+     *
+     * @return string
+     */
+    protected function getThemeLayoutTemplate()
+    {
+        return $this->themeLayoutTemplate;
+    }
+
+    /**
+     * Set module path.
+     *
+     * @param  string $modulePath
+     * @return $this
+     */
+    protected function setModulePath($modulePath)
+    {
+        $this->modulePath = $modulePath;
+
+        return $this;
+    }
+
+    /**
+     * Set theme layout template name.
+     *
+     * @param  string $themeLayoutTemplate
+     * @return $this
+     */
+    protected function setThemeLayoutTemplate($themeLayoutTemplate)
+    {
+        $this->themeLayoutTemplate = $themeLayoutTemplate;
+
+        return $this;
     }
 }
