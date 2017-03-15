@@ -23,6 +23,7 @@
     "eureka/component-routing": "^1.0.0",
     "eureka/component-response": "^1.0.0",
     "eureka/component-template": "^1.0.0",
+    "eureka/component-http": "^1.1.0",
     "psr/http-message": "^1.0.0"
   }
 }
