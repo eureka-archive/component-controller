@@ -199,6 +199,29 @@ abstract class Controller implements ControllerInterface
     }
 
     /**
+     * Override meta description with given description.
+     *
+     * @param  string $description
+     * @return $this
+     */
+    protected function setMetas($title = null, $description = null)
+    {
+        $meta = Config::getInstance()->get('Eureka\Global\Meta');
+
+        if ($title !== null) {
+            $meta['title'] = strip_tags($title . ' - ' . $meta['title']);
+        }
+
+        if ($description !== null) {
+            $meta['description'] = strip_tags($description);
+        }
+
+        Config::getInstance()->add('Eureka\Global\Meta', $meta);
+
+        return $this;
+    }
+
+    /**
      * Get Response object
      *
      * @param  string $templateName
