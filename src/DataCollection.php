@@ -1,7 +1,7 @@
 <?php
 
-/**
- * Copyright (c) 2010-2017 Romain Cottard
+/*
+ * Copyright (c) Romain Cottard
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,29 +16,19 @@ namespace Eureka\Component\Controller;
  */
 class DataCollection implements \Iterator
 {
-    /**
-     * @var integer $length Length of the collection
-     */
+    /** @var integer $length Length of the collection */
     protected $length = 0;
 
-    /**
-     * @var integer Current position of the cursor in collection.
-     */
+    /** @var integer Current position of the cursor in collection. */
     protected $index = 0;
 
-    /**
-     * @var array $indices Index of keys
-     */
+    /** @var array $indices Index of keys */
     protected $indices = array();
 
-    /**
-     * @var array $collection Collection of data.
-     */
+    /** @var array $collection Collection of data. */
     protected $collection = array();
 
-    /**
-     * PatternCollection constructor.
-     */
+    /** PatternCollection constructor. */
     public function __construct()
     {
         $this->collection = array();
@@ -48,7 +38,7 @@ class DataCollection implements \Iterator
      * Add data to the collection.
      *
      * @param  string $key
-     * @param  mixed  $value
+     * @param  mixed $value
      * @return self
      */
     public function add($key, $value)

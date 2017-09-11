@@ -1,7 +1,7 @@
 <?php
 
-/**
- * Copyright (c) 2010-2017 Romain Cottard
+/*
+ * Copyright (c) Romain Cottard
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -26,49 +26,31 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 abstract class Controller implements ControllerInterface
 {
-    /**
-     * @var RouteInterface $route Route object.
-     */
+    /** @var RouteInterface $route Route object. */
     protected $route = null;
 
-    /**
-     * @var DataCollection $dataCollection Data collection object.
-     */
+    /** @var DataCollection $dataCollection Data collection object. */
     protected $dataCollection = null;
 
-    /**
-     * @var string $modulePath Module path.
-     */
+    /** @var string $modulePath Module path. */
     protected $modulePath = '';
 
-    /**
-     * @var TemplateInterface $template Template object.
-     */
+    /** @var TemplateInterface $template Template object. */
     protected $template = null;
 
-    /**
-     * @var Response\ResponseInterface $response
-     */
+    /** @var Response\ResponseInterface $response */
     protected $response = null;
 
-    /**
-     * @var string $themeName Theme name
-     */
+    /** @var string $themeName Theme name */
     protected $themeName = '';
 
-    /**
-     * @var string $themeLayout Theme layout path
-     */
+    /** @var string $themeLayout Theme layout path */
     protected $themeLayoutPath = '';
 
-    /**
-     * @var string $themeLayoutTemplate Theme layout template name
-     */
+    /** @var string $themeLayoutTemplate Theme layout template name */
     protected $themeLayoutTemplate = 'Main';
 
-    /**
-     * @var ServerRequestInterface $request
-     */
+    /** @var ServerRequestInterface $request */
     private $request = null;
 
     /**
@@ -87,7 +69,7 @@ abstract class Controller implements ControllerInterface
     /**
      * This method is executed before the main run() method.
      *
-     * @return   void
+     * @return void
      */
     public function runBefore()
     {
@@ -98,7 +80,7 @@ abstract class Controller implements ControllerInterface
     /**
      * This method is executed after the main run() method.
      *
-     * @return   void
+     * @return void
      */
     public function runAfter()
     {
@@ -199,6 +181,29 @@ abstract class Controller implements ControllerInterface
     }
 
     /**
+     * Get theme layout template name.
+     *
+     * @return string
+     */
+    protected function getThemeLayoutTemplate()
+    {
+        return $this->themeLayoutTemplate;
+    }
+
+    /**
+     * Set theme layout template name.
+     *
+     * @param  string $themeLayoutTemplate
+     * @return $this
+     */
+    protected function setThemeLayoutTemplate($themeLayoutTemplate)
+    {
+        $this->themeLayoutTemplate = $themeLayoutTemplate;
+
+        return $this;
+    }
+
+    /**
      * Override meta description with given description.
      *
      * @param  string $description
@@ -219,115 +224,5 @@ abstract class Controller implements ControllerInterface
         Config::getInstance()->add('Eureka\Global\Meta', $meta);
 
         return $this;
-    }
-
-    /**
-     * Get Response object
-     *
-     * @param  string $templateName
-     * @return ResponseInterface
-     * @deprecated
-     */
-    protected function getResponse($templateName)
-    {
-        $this->response = new ResponseTemplate();
-        $this->response->setHttpCode(200);
-        $this->response->setContent($this->getLayout($this->getTemplate($templateName)));
-
-        return $this->response;
-    }
-
-    /**
-     * Get Response object
-     *
-     * @param  string $templateName
-     * @return ResponseInterface
-     * @deprecated
-     */
-    protected function getResponseJson($content)
-    {
-        $this->response = new Response\Json\Api();
-        $this->response->setHttpCode(200);
-        $this->response->setContent($content);
-
-        return $this->response;
-    }
-
-    /**
-     * Get Main layout template
-     *
-     * @param  TemplateInterface $template
-     * @return Template
-     * @deprecated
-     */
-    protected function getLayout(TemplateInterface $template)
-    {
-        $layout = new Template($this->getThemeLayoutPath() . '/Template/'. $this->getThemeName() . '/' . $this->getThemeLayoutTemplate());
-        $layout->setVar('content', $template->render());
-        $layout->setVar('meta', Config::getInstance()->get('Eureka\Global\Meta'));
-
-        return $layout;
-    }
-
-    /**
-     * Get template instance
-     *
-     * @param  string $templateName
-     * @return Template
-     * @deprecated
-     */
-    protected function getTemplate($templateName)
-    {
-        $template = new Template($this->getModulePath() . '/Template/' . $this->getThemeName() . '/' . $templateName);
-        $template->setVars($this->dataCollection->toArray());
-
-        return $template;
-    }
-
-    /**
-     * Get theme layout template name.
-     *
-     * @return string
-     * @deprecated
-     */
-    protected function getThemeLayoutTemplate()
-    {
-        return $this->themeLayoutTemplate;
-    }
-
-    /**
-     * Set theme layout template name.
-     *
-     * @param  string $themeLayoutTemplate
-     * @return $this
-     * @deprecated
-     */
-    protected function setThemeLayoutTemplate($themeLayoutTemplate)
-    {
-        $this->themeLayoutTemplate = $themeLayoutTemplate;
-
-        return $this;
-    }
-
-    /**
-     * Get layout path.
-     *
-     * @return string
-     * @deprecated
-     */
-    protected function getThemeLayoutPath()
-    {
-        return $this->themeLayoutPath;
-    }
-
-    /**
-     * Get theme name.
-     *
-     * @return string
-     * @deprecated
-     */
-    protected function getThemeName()
-    {
-        return $this->themeName;
     }
 }

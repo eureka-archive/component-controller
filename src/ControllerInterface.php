@@ -1,7 +1,7 @@
 <?php
 
-/**
- * Copyright (c) 2010-2017 Romain Cottard
+/*
+ * Copyright (c) Romain Cottard
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -28,14 +28,14 @@ interface ControllerInterface
     /**
      * This method is executed before the main run() method.
      *
-     * @return   void
+     * @return void
      */
     public function runBefore();
 
     /**
      * This method is executed after the main run() method.
      *
-     * @return   void
+     * @return void
      */
     public function runAfter();
 

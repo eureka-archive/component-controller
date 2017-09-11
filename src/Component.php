@@ -1,7 +1,7 @@
 <?php
 
-/**
- * Copyright (c) 2010-2017 Romain Cottard
+/*
+ * Copyright (c) Romain Cottard
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,24 +19,16 @@ use Eureka\Component\Template\Template;
  */
 abstract class Component
 {
-    /**
-     * @var DataCollection $dataCollection Data collection object.
-     */
+    /** @var DataCollection $dataCollection Data collection object. */
     protected $dataCollection = null;
 
-    /**
-     * @var string $themeName Theme name
-     */
+    /** @var string $themeName Theme name */
     protected $themeName = '';
 
-    /**
-     * @var TemplateInterface $template Template object.
-     */
+    /** @var TemplateInterface $template Template object. */
     protected $template = null;
 
-    /**
-     * @var string $modulePath Module path.
-     */
+    /** @var string $modulePath Module path. */
     protected $modulePath = '';
 
     /**
@@ -101,6 +93,16 @@ abstract class Component
         $this->dataCollection->add($key, $value);
 
         return $this;
+    }
+
+    /**
+     * Get data collection.
+     *
+     * @return DataCollection
+     */
+    protected function getData()
+    {
+        return $this->dataCollection;
     }
 
     /**
