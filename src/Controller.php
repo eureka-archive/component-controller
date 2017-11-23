@@ -73,8 +73,8 @@ abstract class Controller implements ControllerInterface
      */
     public function runBefore()
     {
-        $this->themeName       = Config::getInstance()->get('Eureka\Global\Theme\php\theme');
-        $this->themeLayoutPath = Config::getInstance()->get('Eureka\Global\Theme\php\layout');
+        $this->themeName       = Config::getInstance()->get('global.theme.path.theme');
+        $this->themeLayoutPath = Config::getInstance()->get('global.theme.path.layout');
     }
 
     /**
@@ -122,9 +122,9 @@ abstract class Controller implements ControllerInterface
                 $contentHtml = '<b>Exception[' . $exception->getCode() . ']: ' . $exception->getMessage() . '</b><pre>' . $exception->getTraceAsString() . '</pre>';
             }
 
-            $layoutPath = Config::getInstance()->get('Eureka\Global\Theme\php\layout');
-            $themeName  = Config::getInstance()->get('Eureka\Global\Theme\php\theme');
-            $content    = new Template($layoutPath . '/Template/' . $themeName . '/Main');
+            $layoutPath = Config::getInstance()->get('global.theme.path.layout');
+            $themeName  = Config::getInstance()->get('global.theme.path.theme');
+            $content    = new Template($layoutPath . '/Main');
             $content->setVar('content', $contentHtml);
             $content->setVar('meta', Config::getInstance()->get('meta'));
         }
@@ -211,7 +211,7 @@ abstract class Controller implements ControllerInterface
      */
     protected function setMetas($title = null, $description = null)
     {
-        $meta = Config::getInstance()->get('Eureka\Global\Meta');
+        $meta = Config::getInstance()->get('global.meta');
 
         if ($title !== null) {
             $meta['title'] = strip_tags($title . ' - ' . $meta['title']);
@@ -221,7 +221,7 @@ abstract class Controller implements ControllerInterface
             $meta['description'] = strip_tags($description);
         }
 
-        Config::getInstance()->add('Eureka\Global\Meta', $meta);
+        Config::getInstance()->add('global.meta', $meta);
 
         return $this;
     }
